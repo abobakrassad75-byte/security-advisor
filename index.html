@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مستشار الأمن | فحص التطبيقات والحماية</title>
+    <meta name="description" content="تطبيق فحص التطبيقات واكتشاف المخاطر الأمنية - احمِ هاتفك من الفيروسات وبرامج التجسس">
+    <meta name="keywords" content="فحص الفيروسات, حماية الهاتف, كاشف الاختراقات, أمن الموبايل">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8686648901094978" crossorigin="anonymous"></script>
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a1a2e">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <i class="fas fa-shield-alt"></i>
+                <h1>مستشار الأمن</h1>
+                <p>فحص التطبيقات واكتشاف المخاطر</p>
+            </div>
+            <div class="security-score" id="securityScore">
+                <div class="score-circle">
+                    <span id="scoreValue">--</span>
+                    <small>نقاط الأمان</small>
+                </div>
+            </div>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="app.showTab('scanner')"><i class="fas fa-search"></i> فحص التطبيقات</button>
+            <button class="tab-btn" onclick="app.showTab('upload')"><i class="fas fa-upload"></i> فحص ملف APK</button>
+            <button class="tab-btn" onclick="app.showTab('tips')"><i class="fas fa-lightbulb"></i> نصائح أمنية</button>
+            <button class="tab-btn" onclick="window.location.href='blog.html'"><i class="fas fa-blog"></i> المدونة</button>
+        </div>
+        
+        <div class="tab-content">
+            <div id="scannerTab" class="tab-pane active">
+                <div class="info-banner">
+                    <i class="fas fa-info-circle"></i>
+                    <span>لفحص جميع التطبيقات، فعل "خدمة الوصول" من الإعدادات</span>
+                    <button onclick="app.requestAccessibility()" class="btn-small">تفعيل</button>
+                </div>
+                
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="appSearch" placeholder="🔍 بحث عن تطبيق..." onkeyup="app.filterApps()">
+                </div>
+                
+                <div class="filter-chips">
+                    <button class="chip active" onclick="app.filterByRisk('all')">الكل</button>
+                    <button class="chip" onclick="app.filterByRisk('high')">🔴 خطر</button>
+                    <button class="chip" onclick="app.filterByRisk('medium')">🟡 متوسط</button>
+                    <button class="chip" onclick="app.filterByRisk('low')">🟢 آمن</button>
+                </div>
+                
+                <div style="margin: 20px 0; text-align: center; min-height: 100px;">
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8686648901094978" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+                
+                <div class="apps-list" id="appsList">
+                    <div class="loading"><i class="fas fa-spinner fa-spin"></i><p>جاري فحص التطبيقات...</p></div>
+                </div>
+            </div>
+            
+            <div id="uploadTab" class="tab-pane">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>ارفع ملف APK للفحص</h3>
+                    <p>أو اسحب الملف وأفلته هنا</p>
+                    <p style="font-size: 12px; color: #666; margin-top: 10px;">الحد الأقصى: 32MB</p>
+                    <input type="file" id="apkFile" accept=".apk" style="display: none;" onchange="app.analyzeAPK(event)">
+                    <button onclick="document.getElementById('apkFile').click()" class="btn-primary"><i class="fas fa-folder-open"></i> اختر ملف</button>
+                </div>
+                <div id="analysisResult" style="display: none;"></div>
+                <div id="adAfterAnalysis" style="display: none; margin-top: 20px; min-height: 100px;">
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8686648901094978" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+            </div>
+            
+            <div id="tipsTab" class="tab-pane">
+                <div class="tips-container">
+                    <div class="tip-card warning"><i class="fas fa-exclamation-triangle"></i><h4>تطبيقات تطلب صلاحيات خطيرة</h4><p>احذف أي تطبيق غير موثوق يطلب صلاحية قراءة الرسائل أو تتبع الموقع في الخلفية</p></div>
+                    <div class="tip-card"><i class="fas fa-download"></i><h4>حمل التطبيقات من المتاجر الرسمية فقط</h4><p>تجنب تحميل التطبيقات من مصادر غير معروفة أو روابط واتساب</p></div>
+                    <div class="tip-card"><i class="fas fa-sync-alt"></i><h4>حدث نظام التشغيل باستمرار</h4><p>التحديثات الأمنية تحمي جهازك من الثغرات الجديدة</p></div>
+                    <div class="tip-card"><i class="fas fa-key"></i><h4>استخدم كلمات مرور قوية</h4><p>وفعل التحقق بخطوتين لحساباتك المهمة</p></div>
+                    <div class="tip-card"><i class="fas fa-wifi"></i><h4>تجنب شبكات الواي فاي المفتوحة</h4><p>استخدم VPN عند الاتصال بشبكات عامة</p></div>
+                    <div class="tip-card"><i class="fas fa-shield-virus"></i><h4>استخدم تطبيق "مستشار الأمن" بانتظام</h4><p>افحص هاتفك أسبوعياً للتأكد من خلوه من التطبيقات الضارة</p></div>
+                </div>
+                <div style="margin-top: 30px; min-height: 100px;">
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8686648901094978" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+            </div>
+        </div>
+        
+        <footer style="margin-top: 30px; padding: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="color: var(--gray); font-size: 12px;">
+                <a href="privacy.html" style="color: var(--accent); text-decoration: none;">سياسة الخصوصية</a> | 
+                <a href="blog.html" style="color: var(--accent); text-decoration: none;">المدونة</a> | 
+                <a href="#" onclick="app.showToast('تواصل معنا: security@advisor.com', 'success')" style="color: var(--accent); text-decoration: none;">اتصل بنا</a>
+            </p>
+            <p style="color: var(--gray); font-size: 12px; margin-top: 10px;">© 2026 مستشار الأمن - جميع الحقوق محفوظة</p>
+            <p style="color: var(--gray); font-size: 10px; margin-top: 10px;">تم التطوير بواسطة <strong>Abobakr Assad Mohammed</strong></p>
+        </footer>
+    </div>
+    
+    <div id="toast" class="toast hidden"></div>
+    <script src="app.js"></script>
+</body>
+</html>

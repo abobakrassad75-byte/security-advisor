@@ -1,0 +1,16 @@
+{
+  "name": "مستشار الأمن",
+  "short_name": "مستشار الأمن",
+  "description": "فحص التطبيقات واكتشاف المخاطر الأمنية وحماية هاتفك من الفيروسات",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#1a1a2e",
+  "background_color": "#1a1a2e",
+  "icons": [{
+    "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%231a1a2e'/%3E%3Ctext x='256' y='300' font-size='100' font-family='Arial' font-weight='bold' fill='%23e94560' text-anchor='middle'%3E🛡️%3C/text%3E%3C/svg%3E",
+    "sizes": "512x512",
+    "type": "image/svg+xml"
+  }],
+  "lang": "ar",
+  "dir": "rtl"
+}
